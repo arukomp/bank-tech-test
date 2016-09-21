@@ -39,6 +39,30 @@ describe BankStatement do
     end
   end
 
+  describe '#to_s' do
+
+    let(:statement_history) {
+      [
+        {date: Date.today, type: :debit, amount: 200, balance: 100},
+        {date: Date.today.prev_day, type: :credit, amount: 300, balance: 300}
+      ]
+    }
+
+    it 'returns the correct formatted string for the statement' do
+      allow(statement).to receive(:history).and_return(statement_history)
+      statement_text = "date || credit || debit || balance\n" +
+        Date.today.strftime('%d/%m/%Y') + " || || 200.00 || 100.00\n" +
+        Date.today.prev_day.strftime('%d/%m/%Y') + " || 300.00 || || 300.00"
+      expect(statement.to_s).to eq statement_text
+    end
+
+    it 'returns the header if the history is empty' do
+      allow(statement).to receive(:history).and_return([])
+      statement_text = "date || credit || debit || balance"
+      expect(statement.to_s).to eq statement_text
+    end
+  end
+
   it 'does not allow changing history' do
     history = statement.history
     expect{ history.push('asd') }.to_not change{ statement.history }

@@ -58,4 +58,9 @@ describe BankAccount do
     expect{ balance = 10000 }.to_not change{ account.balance }
   end
 
+  it 'cannot manipulate the statement deliberately' do
+    statement = account.statement
+    expect{ statement = "something" }.to_not change{ account.statement }
+  end
+
 end

@@ -2,14 +2,19 @@ require 'bank'
 
 describe 'Bank App' do
 
-  subject(:bank) { Bank.new }
+  subject(:bank) { BankApp.new }
 
   describe 'starting the banking app' do
+
+    before do
+      allow(bank).to receive(:program_loop).and_return(true)
+    end
+
     it 'should display a welcome message' do
       expect{ bank.start }.to output(/Welcome to your bank account./).to_stdout
     end
-    it 'should call the show_menu method' do
-      expect(bank).to receive(:show_menu).once
+    it 'should call the program_loop method' do
+      expect(bank).to receive(:program_loop).once
       bank.start
     end
     it 'should have a bank account associated with it' do
@@ -37,7 +42,7 @@ describe 'Bank App' do
 
   describe 'print_statement' do
 
-    let(:statement_history) { 
+    let(:statement_history) {
       [
         {date: Date.today, type: :debit, amount: 200, balance: 100},
         {date: Date.today.prev_day, type: :credit, amount: 300, balance: 300}
@@ -52,6 +57,7 @@ describe 'Bank App' do
         Date.today.prev_day.strftime('%d/%m/%Y') + " || 300.00 || || 300.00\n"
       expect{ bank.print_statement }.to output(statement_text).to_stdout
     end
+
   end
 
 end

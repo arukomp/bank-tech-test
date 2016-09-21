@@ -1,3 +1,5 @@
+require 'date'
+
 class BankStatement
 
   def initialize

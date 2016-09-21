@@ -1,6 +1,6 @@
-require 'bank_account'
+require_relative 'bank_account'
 
-class Bank
+class BankApp
 
   attr_reader :account
 
@@ -10,7 +10,30 @@ class Bank
 
   def start
     puts 'Welcome to your bank account.'
-    show_menu
+    program_loop
+  end
+
+  def program_loop
+    exit = false
+    loop do
+      print_balance
+      show_menu
+      selection = gets.chomp
+      case selection
+      when "1"
+        select_deposit
+      when "2"
+        select_withdraw
+      when "3"
+        print_statement
+      when "9"
+        puts 'See you later!'
+        exit = true
+      else
+        puts 'Invalid selection'
+      end
+      break if exit
+    end
   end
 
   def show_menu
@@ -18,6 +41,24 @@ class Bank
     puts "2. Withdraw"
     puts "3. Print Statement"
     puts "9. Exit"
+  end
+
+  def select_deposit
+    loop do
+      print "Enter the amount to deposit: "
+      amount = gets.chomp.to_i
+      success = @account.deposit(amount)
+      break if success
+    end
+  end
+
+  def select_withdraw
+    loop do
+      print "Enter the amount to withdraw: "
+      amount = gets.chomp.to_i
+      success = @account.withdraw(amount)
+      break if success
+    end
   end
 
   def print_balance
